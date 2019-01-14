@@ -1,9 +1,19 @@
 import React, {Component} from 'react';
-import {RadiumStarterRoot, Button} from 'radium-starter';
+import {RadiumStarterRoot, Button, Heading1} from 'radium-starter';
 
 import Modal from '@medmain/react-modal';
 
+/*
+Creating an instance of the `Modal` class, that will be used in the following examples...
+*/
 const modal = new Modal();
+/*
+...and a customized version, to simulating
+*/
+const customModal = new Modal({
+  okButtonTitle: () => 'Just do it',
+  cancelButtonTitle: () => 'No way'
+});
 
 class App extends Component {
   async start() {
@@ -22,9 +32,6 @@ class App extends Component {
         }
       }
     );
-    // const result = await modal.dialog({
-    //   render: ({close}) => <button onClick={() => close(true)}>Close</button>
-    // });
     console.log(result);
   }
 
@@ -40,24 +47,65 @@ class App extends Component {
           }}
         >
           <Button onClick={this.start}>Start</Button>
-          <Button onClick={async () => {
-            const answer = await modal.dialog({
-              title: 'Please confirm',
-              message: 'Is it OK?',
-              buttons: [{value: 1, title: 'Option 1'}, {value: 2, title: 'Option 2', isDefault: true}]
-            });
-            console.info(answer)
-          }}>Dialog</Button>
-          <Button onClick={async () => {
-            const answer = await modal.alert('It was great!')
-            console.info(answer)
-          }}>Alert</Button>
-          <Button onClick={async () => {
-            const answer = await modal.confirm('Are you really sure?')
-            console.info(answer)
-          }}>Confirm</Button>
+          <Button
+            onClick={async () => {
+              const answer = await modal.dialog({
+                title: 'Please confirm',
+                message: 'Is it OK?',
+                buttons: [
+                  {value: 1, title: 'Option 1'},
+                  {value: 2, title: 'Option 2', isDefault: true}
+                ]
+              });
+              console.info(answer);
+            }}
+          >
+            Dialog
+          </Button>
+          <Button
+            onClick={async () => {
+              const answer = await modal.dialog({
+                render: ({close}) => <div>
+                  <p>This dialog renders a custom component.</p>
+                  <Button onClick={() => close('A')} rsPrimary>Option A</Button>
+                  {' '}
+                  <Button onClick={() => close('B')}>Option B</Button>
+                  </div>
+              });
+              console.info(answer);
+            }}
+          >
+            Dialog with "render" attribute
+          </Button>
+          <Button
+            onClick={async () => {
+              const answer = await modal.alert('It was great!');
+              console.info(answer);
+            }}
+          >
+            Alert
+          </Button>
+          <Button
+            onClick={async () => {
+              const answer = await modal.confirm('Are you really sure?');
+              console.info(answer);
+            }}
+          >
+            Confirm
+          </Button>
+          <Button
+            onClick={async () => {
+              const answer = await customModal.confirm(
+                'This is a `confirm()` from a custom `Modal` object'
+              );
+              console.info(answer);
+            }}
+          >
+            Custom modal object - Confirm
+          </Button>
         </div>
         {modal.createElement()}
+        {customModal.createElement()}
       </RadiumStarterRoot>
     );
   }
