@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {RadiumStarterRoot, Button, Heading1} from 'radium-starter';
+import {RadiumStarterRoot, Button} from 'radium-starter';
 
 import Modal from '@medmain/react-modal';
 
@@ -65,12 +65,15 @@ class App extends Component {
           <Button
             onClick={async () => {
               const answer = await modal.dialog({
-                render: ({close}) => <div>
-                  <p>This dialog renders a custom component.</p>
-                  <Button onClick={() => close('A')} rsPrimary>Option A</Button>
-                  {' '}
-                  <Button onClick={() => close('B')}>Option B</Button>
+                render: ({close}) => (
+                  <div>
+                    <p>This dialog renders a custom component.</p>
+                    <Button onClick={() => close('A')} rsPrimary>
+                      Option A
+                    </Button>{' '}
+                    <Button onClick={() => close('B')}>Option B</Button>
                   </div>
+                )
               });
               console.info(answer);
             }}
